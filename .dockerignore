@@ -1,0 +1,80 @@
+# .dockerignore for codebuddy2cc
+# 排除不需要构建到Docker镜像中的文件和目录
+
+# 构建文件和二进制
+codebuddy2cc
+*.exe
+*.dll
+*.so
+*.dylib
+dist/
+build/
+
+# IDE文件
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日志文件
+logs/
+*.log
+debug.log
+
+# 环境和配置文件（敏感信息）
+.env
+.env.local
+.env.*.local
+
+# Git相关
+.git
+.gitignore
+
+# 测试和覆盖率文件
+*.test
+*.out
+coverage.txt
+coverage.html
+
+# 依赖目录（在Docker构建中重新下载）
+vendor/
+
+# 文档和说明文件
+README.md
+CLAUDE.md
+*.md
+
+# macOS LaunchAgent相关文件
+*.plist
+*.plist.template
+Makefile
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.temp
+
+# 调试和分析文件
+*.prof
+*.pprof
+
+# Node.js相关（如果有前端构建）
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 其他不相关文件
+*.txt
+gpt5.txt

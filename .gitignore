@@ -1,0 +1,10 @@
+.env
+codebuddy2cc
+*.log
+req*.json
+.gocache
+.gopath
+codebuddy2api
+.claude/settings.local.json
+gpt5.txt
+com.codebuddy2cc.service.plist

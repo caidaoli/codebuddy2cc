@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.codebuddy2cc.service</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>{{PROJECT_DIR}}/codebuddy2cc</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>{{PROJECT_DIR}}</string>
+	<key>StandardOutPath</key>
+	<string>{{PROJECT_DIR}}/logs/codebuddy2cc.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{PROJECT_DIR}}/logs/codebuddy2cc.log</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		{{ENV_VARIABLES}}
+	</dict>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+		<key>NetworkState</key>
+		<true/>
+	</dict>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>Nice</key>
+	<integer>1</integer>
+</dict>
+</plist>
