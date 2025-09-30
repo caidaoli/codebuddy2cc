@@ -51,6 +51,7 @@ func main() {
 	v1.Use(middleware.AuthMiddleware())
 	{
 		v1.POST("/messages", handlers.MessagesHandler)
+		v1.GET("/models", handlers.ModelsHandler)
 	}
 
 	router.GET("/health", func(c *gin.Context) {
