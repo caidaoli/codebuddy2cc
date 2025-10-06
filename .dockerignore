@@ -39,20 +39,28 @@ debug.log
 # Git相关
 .git
 .gitignore
+.gitattributes
 
 # 测试和覆盖率文件
 *.test
 *.out
 coverage.txt
 coverage.html
+*_test.go
 
 # 依赖目录（在Docker构建中重新下载）
 vendor/
+.cache/
 
 # 文档和说明文件
 README.md
 CLAUDE.md
 *.md
+LICENSE
+CHANGELOG*
+docs/
+examples/
+test/
 
 # macOS LaunchAgent相关文件
 *.plist
@@ -74,6 +82,15 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# CI/CD配置
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# Docker相关（避免递归）
+Dockerfile*
+docker-compose*.yml
 
 # 其他不相关文件
 *.txt

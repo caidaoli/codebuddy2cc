@@ -1,5 +1,6 @@
 # Docker Compose配置文件 - codebuddy2cc
 # 用于本地开发和测试环境
+# 支持BuildKit缓存加速和多架构构建
 
 version: '3.8'
 
@@ -8,6 +9,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+      # BuildKit缓存配置（可选：使用本地缓存）
+      # cache_from:
+      #   - type=local,src=/tmp/.buildx-cache
+      # cache_to:
+      #   - type=local,dest=/tmp/.buildx-cache,mode=max
     container_name: codebuddy2cc
     ports:
       - "${PORT:-8080}:8080"
@@ -18,6 +27,7 @@ services:
       - DEBUG=${DEBUG:-false}
       - DEBUG_FILE=${DEBUG_FILE:-}
       - CODEBUDDY2CC_UPSTREAM_URL=${CODEBUDDY2CC_UPSTREAM_URL:-}
+      - GIN_MODE=release
     env_file:
       - .env
     volumes:
@@ -27,9 +37,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
-      timeout: 10s
+      timeout: 3s
       retries: 3
-      start_period: 10s
+      start_period: 5s
     networks:
       - codebuddy2cc-network
 

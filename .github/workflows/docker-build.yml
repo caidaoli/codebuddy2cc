@@ -23,11 +23,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 设置Go环境
+    # 设置Go环境（用于代码质量检查）
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version: '1.25'
+        cache: true
 
     # 运行代码质量检查
     - name: Run quality checks
@@ -37,9 +38,17 @@ jobs:
         go vet ./...
         go test -v ./...
 
-    # 设置Docker Buildx
+    # 设置QEMU（支持多架构模拟）
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
+    # 设置Docker Buildx（启用BuildKit）
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+      with:
+        driver-opts: |
+          image=moby/buildkit:latest
+          network=host
 
     # 登录到GitHub Container Registry
     - name: Log in to Container Registry
@@ -62,7 +71,11 @@ jobs:
           type=semver,pattern={{major}}.{{minor}}
           type=semver,pattern={{major}}
 
-    # 构建并推送Docker镜像
+    # 构建并推送Docker镜像（使用优化的Dockerfile）
+    # 关键优化：
+    # 1. tonistiigi/xx交叉编译工具链（避免QEMU模拟开销）
+    # 2. BuildKit缓存挂载（复用Go模块和构建缓存）
+    # 3. GitHub Actions缓存（跨workflow复用）
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
@@ -71,17 +84,22 @@ jobs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        # GitHub Actions缓存（最高效）
         cache-from: type=gha
         cache-to: type=gha,mode=max
+        # 启用BuildKit内联缓存
         build-args: |
-          BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
-          VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
-          REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
+          BUILDKIT_INLINE_CACHE=1
 
     # 输出构建结果
     - name: Output build results
       run: |
         echo "### 🐳 Docker镜像构建完成" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**构建优化:**" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ tonistiigi/xx交叉编译（无QEMU开销）" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ BuildKit缓存挂载（Go模块+构建缓存）" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ GitHub Actions缓存（跨workflow复用）" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**镜像标签:**" >> $GITHUB_STEP_SUMMARY
         echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
