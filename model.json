@@ -1,6 +1,6 @@
 {
   "models": {
-    "claude-sonnet-4-20250514": "claude-4.0",
-    "claude-3-5-haiku-20241022": "claude-4.0"
+    "claude-sonnet-4-20250514": "default-model",
+    "claude-3-5-haiku-20241022": "auto-chat"
   }
 }

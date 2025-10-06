@@ -758,7 +758,7 @@ func MessagesHandler(c *gin.Context) {
 		return
 	}
 
-	utils.DebugLog("[Request:%s] Using configured API key", requestID)
+	// utils.DebugLog("[Request:%s] Using configured API key", requestID)
 	upstreamReq.Header.Set("Authorization", "Bearer "+upstreamKey)
 	upstreamReq.Header.Set("Content-Type", "application/json")
 	upstreamReq.Header.Set("User-Agent", "CLI/1.0.9 CodeBuddy/1.0.9")
@@ -829,7 +829,7 @@ func MessagesHandler(c *gin.Context) {
 	}
 
 	// 🔧 成功响应：处理响应
-	utils.DebugLog("[Request:%s] Successful response received", requestID)
+	// utils.DebugLog("[Request:%s] Successful response received", requestID)
 
 	defer resp.Body.Close()
 
@@ -874,7 +874,7 @@ func processUnifiedResponse(resp *http.Response, toolManager *DefaultToolCallMan
 	var usage *utils.Usage
 	var isToolCall bool = false
 
-	utils.DebugLog("[Request:%s] Processing unified response with manager stats: %+v", requestID, toolManager.GetStats())
+	// utils.DebugLog("[Request:%s] Processing unified response with manager stats: %+v", requestID, toolManager.GetStats())
 
 	// 使用完全独立的context
 	processCtx, processCancel := context.WithTimeout(context.Background(), 600*time.Second)
